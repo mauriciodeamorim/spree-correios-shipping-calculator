@@ -116,6 +116,12 @@ describe "SedexCalculator", "When there is weight" do
     @ws.should_receive(:calcPrecoPrazo).with(hash_including(:nVlPeso => "9")).and_return(@ws_response)
     @preco_obtido_pelo_ws.should be_equal @calculator.compute([mock_line_item(:weight => 9)])
   end
+  
+  it "should convert string value of webservice result to float" do
+    @preco_obtido_pelo_ws = "12,34"
+    
+    @calculator.compute.should == 12.34
+  end
 
 end
 

@@ -39,7 +39,12 @@ preference :zipcode, :string
     ws = CalcPrecoPrazoWSSoap.new
     result = ws.calcPrecoPrazo parameters
     return result.calcPrecoPrazoResult.servicos.first.msgErro if result.calcPrecoPrazoResult.servicos.first.erro != '0'
-    result.calcPrecoPrazoResult.servicos.first.valor.gsub!(',','.').to_f
+    convert_value_to_float result
   end
+  
+  private  
+    def convert_value_to_float(result)
+      result.calcPrecoPrazoResult.servicos.first.valor.gsub!(',','.').to_f
+    end
+    
 end
-
