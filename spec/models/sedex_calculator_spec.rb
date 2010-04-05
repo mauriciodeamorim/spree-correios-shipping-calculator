@@ -33,7 +33,7 @@ describe "SedexCalculator", "When there is weight" do
 
     obj = Object.new
     calcPrecoPrazoResult = Object.new
-    @preco_obtido_pelo_ws = 5
+    @preco_obtido_pelo_ws = "5,00"
 
     @ws_response.stub(:calcPrecoPrazoResult).with(no_args()).and_return(calcPrecoPrazoResult)
     calcPrecoPrazoResult.stub(:servicos).with(no_args()).and_return([obj])
@@ -47,7 +47,7 @@ describe "SedexCalculator", "When there is weight" do
 
     line_item = mock_line_item :weight => 1
 
-    @preco_obtido_pelo_ws.should be_equal @calculator.compute([line_item])
+    @calculator.compute([line_item]).should == 5.0
   end
 
   it "should return the ws result based on the weight sum of two different variants" do
@@ -56,7 +56,7 @@ describe "SedexCalculator", "When there is weight" do
     ipod = mock_line_item :weight => 6
     wii = mock_line_item :weight => 4
 
-    @preco_obtido_pelo_ws.should be_equal @calculator.compute([ipod, wii])
+    @calculator.compute([ipod, wii]) == 5.0
   end
 
   it "should return the ws result based on the weight sum of one variant where the quantity is two" do
@@ -118,9 +118,11 @@ describe "SedexCalculator", "When there is weight" do
   end
   
   it "should convert string value of webservice result to float" do
-    @preco_obtido_pelo_ws = "12,34"
-    
-    @calculator.compute.should == 12.34
+    @ws.stub(:calcPrecoPrazo).and_return(@ws_response)
+
+    line_item = mock_line_item :weight => 1
+
+    @calculator.compute([line_item]).should == 5.0    
   end
 
 end
